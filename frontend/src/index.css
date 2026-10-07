@@ -1,0 +1,63 @@
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Give all border-box to prevent exceed screen */
+* {
+  box-sizing: border-box;
+}
+
+/* Refers to the <HTML> element */
+:root {
+  font-family: Inter, Arial, sans-serif;
+  color: #172033;
+  background: #f6f8fc;
+  font-synthesis: none;
+}
+
+/* Set min width */
+body {
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+/* These element does not inherit font properties, make them inherit */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* Set cursor for buttons */
+button {
+  cursor: pointer;
+}
+
+/* Give outer box when use tag */
+button:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.18);
+  outline-offset: 2px;
+}
+
+.app-left
+{
+  width: 220px;
+}
+
+.app-right
+{
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+  min-width: none;
+
+  padding-left: 35px;
+  padding-right: 30px;
+  
+  font-family: 'Times New Roman', Times, serif;
+}

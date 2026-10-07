@@ -1,0 +1,214 @@
+/* Entire container with fixed size */
+.applications-table-container {
+  background: #fff;
+  border: 1px solid #e2e7f0;
+  border-radius: 13px;
+  padding: 15px;
+
+  font-family: "Times New Roman", Times, serif;
+  width: 1100px;
+}
+
+/* Header section */
+.applications-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-header-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.table-header-number-shown {
+  color: #8a95a8;
+  font-size: 12px;
+}
+
+/* Filter section */
+.table-filters {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.table-filter {
+  border: 1px solid #e3e7ee;
+  background: #f7f8fb;
+  color: #637089;
+  border-radius: 8px;
+  font-size: 12px;
+
+  padding: 10px;
+  margin: 0px;
+}
+
+.table-filter.active {
+  border-color: #dbe7ff;
+  background: #eaf1ff;
+  color: #1d5bd7;
+}
+
+/* Content section */
+
+.table-scroll-container {
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.table-content {
+  margin-top: 10px;
+  width: 100%;
+  /* This line below is to remove border between table*/
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table-content th:last-child
+{
+  padding-left: 20px;
+}
+
+tr {
+  vertical-align: center;
+}
+
+th {
+  color: #78849a;
+  text-align: left;
+  font-weight: 600;
+  background: #fafbfc;
+  padding: 11px 9px;
+  border-top: 1px solid rgb(237, 240, 245);
+  border-bottom: 1px solid rgb(237, 240, 245);
+}
+
+td {
+  padding: 11px 9px;
+  border-bottom: 1px solid rgb(237, 240, 245);
+  color: #526078;
+  vertical-align: middle;
+}
+
+/* Company column */
+.company-column {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.company-image {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(173, 216, 230, 0.3);
+  color: #2563eb;
+
+  /* 2 line below are for centering */
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+/* Role column - Nothing since it is just text */
+
+/* Status column, default is blue color*/
+.status-column {
+  background: rgb(238, 241, 245);
+  color: rgb(83, 96, 120);
+  font-weight: 600;
+
+  /* For make it take space only as needed */
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+/* Below are for changing colors */
+.status-column.interviewing {
+  background: rgb(232, 240, 255);
+  color: rgb(36, 96, 215);
+}
+
+.status-column.applied {
+  background: rgb(242, 233, 255);
+  color: rgb(124, 62, 208);
+}
+
+.status-column.offer {
+  background: rgb(229, 248, 237);
+  color: rgb(21, 134, 83);
+}
+
+.status-column.rejected {
+  background: rgb(255, 235, 235);
+  color: rgb(217, 47, 47);
+}
+
+/* Next column */
+.next-column {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+
+  padding: 0px;
+  margin: 0px;
+}
+
+.next-column-next-step {
+  color: rgb(56, 69, 92);
+  font-weight: 600;
+  padding: 0px;
+  margin: 0px;
+}
+
+.next-column-date {
+  color: rgb(137, 148, 167);
+  padding: 0px;
+  margin: 0px;
+  margin-top: 5px;
+  font-size: 10px;
+}
+
+/* Location column - Nothing here, it is just text */
+
+/* Actions column */
+.actions-column {
+  display: flex;
+  align-items: center;
+}
+
+.actions-column-edit,
+.actions-column-delete {
+  display: grid;
+  place-items: center;
+
+  border: none;
+  background-color: transparent;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.edit-icon {
+  height: 15px;
+}
+
+.delete-icon {
+  height: 15px;
+}
+
+.actions-column-edit:hover {
+  background: rgb(240, 243, 248);
+}
+
+.actions-column-delete:hover {
+  background: rgb(255, 240, 240);
+  color: rgb(217, 47, 47);
+}
+
+.no-result {
+  text-align: center;
+  padding: 20px;
+  color: rgb(138, 149, 168);
+}

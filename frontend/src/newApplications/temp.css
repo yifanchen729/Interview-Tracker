@@ -1,0 +1,263 @@
+/* ---------------- HEADER ---------------- */
+
+.job-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 15px;
+}
+
+.job-table-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.job-table-header p {
+  margin: 5px 0 0 0;
+
+  color: #8a95a8;
+  font-size: 12px;
+}
+
+.job-count {
+  color: #8a95a8;
+  font-size: 12px;
+}
+
+
+/* ---------------- FILTERS ---------------- */
+
+.job-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 12px;
+}
+
+
+/* Search box */
+
+.job-search {
+  display: flex;
+  align-items: center;
+
+  width: 260px;
+
+  border: 1px solid #e3e7ee;
+  border-radius: 8px;
+
+  background: #f7f8fb;
+
+  padding: 0 10px;
+}
+
+.job-search img {
+  width: 14px;
+  height: 14px;
+
+  margin-right: 8px;
+}
+
+.job-search input {
+  width: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  padding: 10px 0;
+
+  color: #526078;
+  font-size: 12px;
+}
+
+
+/* Dropdown filters */
+
+.job-filter-select {
+  border: 1px solid #e3e7ee;
+  border-radius: 8px;
+
+  background: #f7f8fb;
+
+  padding: 10px 12px;
+
+  color: #637089;
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+
+/* ---------------- SCROLL AREA ---------------- */
+
+.job-table-scroll {
+  max-height: 480px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+/* ---------------- TABLE ---------------- */
+
+.job-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  font-size: 13px;
+}
+
+
+/* Keep table headings visible when scrolling */
+
+.job-table thead {
+  position: sticky;
+  top: 0;
+
+  background: #fafbfc;
+
+  z-index: 2;
+}
+
+
+.job-table th {
+  padding: 11px 9px;
+
+  text-align: left;
+
+  color: #78849a;
+  font-weight: 600;
+
+  background: #fafbfc;
+
+  border-top: 1px solid #edf0f5;
+  border-bottom: 1px solid #edf0f5;
+}
+
+
+.job-table td {
+  padding: 12px 9px;
+
+  color: #526078;
+
+  border-bottom: 1px solid #edf0f5;
+
+  vertical-align: middle;
+}
+
+
+.job-table tbody tr:hover {
+  background: #fafbfc;
+}
+
+
+/* ---------------- COMPANY ---------------- */
+
+.job-company {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.job-company-icon {
+  width: 30px;
+  height: 30px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 8px;
+
+  background: rgba(173, 216, 230, 0.3);
+
+  color: #2563eb;
+
+  font-weight: 800;
+}
+
+
+/* ---------------- ROLE ---------------- */
+
+.job-role {
+  color: #38455c;
+  font-weight: 600;
+}
+
+
+/* ---------------- STATUS ---------------- */
+
+.job-status {
+  display: inline-block;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  font-weight: 600;
+}
+
+
+.job-status.to-apply {
+  background: rgb(238, 241, 245);
+  color: rgb(83, 96, 120);
+}
+
+
+.job-status.applied {
+  background: rgb(242, 233, 255);
+  color: rgb(124, 62, 208);
+}
+
+
+.job-status.interviewing {
+  background: rgb(232, 240, 255);
+  color: rgb(36, 96, 215);
+}
+
+
+.job-status.offer {
+  background: rgb(229, 248, 237);
+  color: rgb(21, 134, 83);
+}
+
+
+.job-status.rejected {
+  background: rgb(255, 235, 235);
+  color: rgb(217, 47, 47);
+}
+
+
+/* ---------------- APPLY BUTTON ---------------- */
+
+.job-apply-button {
+  display: inline-block;
+
+  padding: 7px 14px;
+
+  border-radius: 7px;
+
+  background: #2563eb;
+
+  color: white;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+
+.job-apply-button:hover {
+  background: #1d5bd7;
+}

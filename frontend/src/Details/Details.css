@@ -1,0 +1,64 @@
+/* Flex */
+.details-grid {
+  display: flex;
+
+  padding: 15px 0px;
+  gap: 14px;
+}
+
+/* Container for each grid */
+.details-card {
+  flex: 1;
+  padding: 40px;
+  
+  background: white;
+  border: 1px solid rgba(173, 216, 230, 0.4);
+  border-radius: 13px;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* The icon */
+.details-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+}
+
+/* Below are for changing colors */
+.details-icon.blue
+{
+  background: rgba(173, 216, 230, 0.3);
+}
+
+.details-icon.green {
+  background: rgba(144, 238, 144, 0.25);
+}
+
+.details-icon.red {
+  background: rgba(255, 182, 193, 0.25);
+}
+
+/* This displays the info */
+.details-info
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.details-label {
+  margin: 0 0;
+  color: rgb(100, 112, 137);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.details-value {
+  margin: 0 0;
+  font-weight: 600;
+  font-size: 27px;
+}
