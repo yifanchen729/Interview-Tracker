@@ -29,10 +29,10 @@ export function Details({applications} : DetailsProp) {
 
   // Information regarding each type
   const details = [
-    { label: 'Total Applications', value: applicationNum, color: "blue"},
-    { label: 'Upcoming Interviews', value: interviewingNum, color: "blue"},
-    { label: 'Offers', value : offerNum, color: "green"},
-    { label: 'Rejections', value: rejectedNum, color: "red"}
+    { label: 'Total Applications', image: "/Details/applications.svg", value: applicationNum, color: "blue"},
+    { label: 'Upcoming Interviews', image: "/Details/interviews.svg", value: interviewingNum, color: "blue"},
+    { label: 'Offers', image: "/Details/offers.svg", value : offerNum, color: "green"},
+    { label: 'Rejections', image: "/Details/rejections.svg", value: rejectedNum, color: "red"}
   ];
 
   // Display it with html
@@ -43,7 +43,7 @@ export function Details({applications} : DetailsProp) {
         <div className="details-card" key={detail.label}>
           {/* The icon */}
           <div className={`details-icon ${detail.color}`}>
-  
+            <img src={detail.image} className='details-icon-image'/>
           </div>
           {/* Display the text */}
           <div className="details-info">

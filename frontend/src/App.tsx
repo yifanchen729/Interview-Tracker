@@ -61,7 +61,7 @@ function App() {
           />)}
         
         { activePage === "Applications" &&
-          <NewApplications applications={applications}/>}
+          <NewApplications />}
         
         { activePage === "Statistics" &&
           (<Charts
