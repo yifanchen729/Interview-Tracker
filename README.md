@@ -12,7 +12,7 @@ The application aggregates job postings from public job-board APIs and provides 
 - View posting dates and application deadlines
 - Open original job postings directly from the application
 - Visualize application progress using a Sankey chart
-- Use AI to give advice using current application data
+- Provide AI-powered recommendations based on current application data
 
 ## Technology
 
