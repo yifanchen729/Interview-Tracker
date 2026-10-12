@@ -80,7 +80,9 @@ function App() {
             )}
           </div>
             <div className="different-pages-right">
-              <AIChat />
+              <AIChat
+                applications={applications}
+              />
             </div>
         </div>
 

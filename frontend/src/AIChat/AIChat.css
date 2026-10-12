@@ -70,6 +70,7 @@
   flex: 1;
   padding: 18px;
   overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .message-row {

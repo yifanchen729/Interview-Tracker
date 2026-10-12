@@ -132,13 +132,13 @@ export function Charts({ applications }: ChartsProp) {
             data={graphData}
             node={MyCustomSankeyNode}
             link={MyCustomSankeyLink}
-            nodeWidth={12}
+            nodeWidth={10}
             nodePadding={60}
             margin={{
-              top: 0,
-              right: 80,
-              bottom: 0,
-              left: 20,
+              top: 20,
+              right: 100,
+              bottom: 20,
+              left: 40,
             }}
           >
             <Tooltip />
