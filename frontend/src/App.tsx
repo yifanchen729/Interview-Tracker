@@ -1,26 +1,27 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 
-import "./App.css"
-import { SideBar } from "./SideBar/SideBar"
-import { Header } from "./Header/Header"
-import { Details } from "./Details/Details"
-import { Applications } from "./Applications/Applications"
-import type { Application } from "./data/ApplicationArray"
-import { ApplicationArray } from "./data/ApplicationArray"
-import { ApplicationForm } from "./Forms/ApplicationForm/ApplicationForm"
-import { EditForm } from "./Forms/EditForm/EditForm"
-import { Charts } from "./Charts/Chart"
-import { NewApplications } from "./newApplications/newApplications"
+import "./App.css";
+import { SideBar } from "./SideBar/SideBar";
+import { Header } from "./Header/Header";
+import { Details } from "./Details/Details";
+import { Applications } from "./Applications/Applications";
+import type { Application } from "./data/ApplicationArray";
+import { ApplicationArray } from "./data/ApplicationArray";
+import { ApplicationForm } from "./Forms/ApplicationForm/ApplicationForm";
+import { EditForm } from "./Forms/EditForm/EditForm";
+import { Charts } from "./Charts/Chart";
+import { NewApplications } from "./newApplications/newApplications";
+import { AIChat } from "./AIChat/AIChat";
 
 function App() {
-
   // useState for current page
-  const [activePage, setActivePage] = useState('Dashboard');
+  const [activePage, setActivePage] = useState("Dashboard");
 
   // useState for add application
   const [addingApplication, setAddingApplication] = useState(false);
   const [editingApplication, setEditingApplication] = useState(false);
   const [editingApplicationID, setEditingApplicationID] = useState("");
+  const [search, setSearch] = useState("");
 
   // Create application from local storage
   const [applications, setApplications] = useState<Application[]>(() => {
@@ -49,40 +50,58 @@ function App() {
       {/* Right part */}
       <div className="app-right">
         {/* Header and Details are always shown*/}
-        <Header activePage={activePage} setAddingApplication={setAddingApplication}/>
+        <Header
+          activePage={activePage}
+          setActivePage={setActivePage}
+          setAddingApplication={setAddingApplication}
+          setSearch={setSearch}
+        />
         <Details applications={applications} />
-        
-        { activePage === "Dashboard" &&
-          (<Applications
-            applications={applications}
-            setApplications={setApplications}
-            setEditingApplication={setEditingApplication}
-            setEditingApplicationID={setEditingApplicationID}
-          />)}
-        
-        { activePage === "Applications" &&
-          <NewApplications />}
-        
-        { activePage === "Statistics" &&
-          (<Charts
-            applications={applications}
-          />)}
-        
+
+        <div className="different-pages">
+          <div className="different-pages-left">
+            {activePage === "Dashboard" && (
+              <Applications
+                applications={applications}
+                setApplications={setApplications}
+                setEditingApplication={setEditingApplication}
+                setEditingApplicationID={setEditingApplicationID}
+              />
+            )}
+
+            {activePage === "Applications" &&
+              <NewApplications
+                search={search}
+                setSearch={setSearch}
+              />}
+
+            {activePage === "Statistics" && (
+              <Charts applications={applications} />
+            )}
+          </div>
+            <div className="different-pages-right">
+              <AIChat />
+            </div>
+        </div>
+
         {/* If adding application, then render the form */}
-        { addingApplication &&
-          (<ApplicationForm
-            applications={applications} 
+        {addingApplication && (
+          <ApplicationForm
+            applications={applications}
             setApplications={setApplications}
-            setAddingApplication={setAddingApplication} />)}
+            setAddingApplication={setAddingApplication}
+          />
+        )}
 
         {/* If editing application, then render the form */}
-        { editingApplication &&
-          (<EditForm
-            applications={applications} 
+        {editingApplication && (
+          <EditForm
+            applications={applications}
             setApplications={setApplications}
             setEditingApplication={setEditingApplication}
             editingApplicationID={editingApplicationID}
-          />)}
+          />
+        )}
       </div>
     </div>
   );

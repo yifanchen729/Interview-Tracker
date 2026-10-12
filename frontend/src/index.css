@@ -42,22 +42,3 @@ textarea:focus-visible {
   outline: 3px solid rgba(37, 99, 235, 0.18);
   outline-offset: 2px;
 }
-
-.app-left
-{
-  width: 220px;
-}
-
-.app-right
-{
-  display: flex;
-  flex-direction: column;
-
-  flex: 1;
-  min-width: none;
-
-  padding-left: 35px;
-  padding-right: 30px;
-  
-  font-family: 'Times New Roman', Times, serif;
-}

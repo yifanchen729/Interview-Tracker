@@ -2,3 +2,46 @@
 {
   display: flex;
 }
+
+.app-left
+{
+  width: 220px;
+}
+
+.app-right
+{
+  width: 100vw;
+  height: 97vh;
+
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+  min-width: none;
+
+  padding-left: 35px;
+  padding-right: 30px;
+  
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.different-pages
+{
+  display: flex;
+  gap: 15px;
+  height: 100%;
+}
+
+.different-pages-left
+{
+  flex: .75;
+
+  /* background-color: lightblue; */
+}
+
+.different-pages-right
+{
+  flex: .25;
+
+  /* background-color: lightpink; */
+}

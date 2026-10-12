@@ -3,7 +3,12 @@ import axios from "axios"
 
 import "./newApplications.css";
 
-export function NewApplications() {
+type NewApplicationsProps = {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export function NewApplications({ search, setSearch }: NewApplicationsProps) {
   const [apps, setApps] = useState<{
     id: string;
     company: string;
@@ -14,7 +19,6 @@ export function NewApplications() {
     url: string;
   }[]>([]);
 
-  const [search, setSearch] = useState("");
   const [company, setCompany] = useState("All Companies");
   const [location, setLocation] = useState("All Locations");
   const [datePosted, setDatePosted] = useState("Date Posted");
@@ -98,6 +102,11 @@ export function NewApplications() {
     setFilteredApps(result);
   };
 
+  // There is a warning
+  useEffect(() => {
+    applyFilters();
+  }, [search]);
+
   return (
     <div className="new-applications-table-container">
       <div className="applications-table-header">
@@ -118,6 +127,11 @@ export function NewApplications() {
               placeholder="Search companies, roles, or notes..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  applyFilters();
+                }
+              }}
             />
           </div>
 
