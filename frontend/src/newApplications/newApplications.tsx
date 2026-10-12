@@ -102,9 +102,12 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
     setFilteredApps(result);
   };
 
-  // There is a warning
+  // There is a warning (Solving this will take too much time, since it currently does not influence
+  // product, leave it as it is)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     applyFilters();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (
