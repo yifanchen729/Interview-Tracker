@@ -4,6 +4,16 @@ Interview Tracker is a full-stack web application for discovering job opportunit
 
 The application aggregates job postings from public job-board APIs and provides tools for searching, filtering, and exploring available positions. Users can also manage their applications, track their progress through different stages, monitor upcoming deadlines, and visualize their application activity through an interactive dashboard.
 
+## Screenshots
+
+### Application Dashboard
+
+![Application Dashboard](screenshots/dashboard.png)
+
+### Job Finder
+
+![Job Finder](screenshots/jobtable.png)
+
 ## Features
 
 - Track one self's current job applications and their current status
