@@ -78,11 +78,24 @@ export function Charts({ applications }: ChartsProp) {
     return (
       <Layer>
         <Rectangle x={x} y={y} width={width} height={height} fill={color} />
-
-        <text x={x + width + 10} y={y + height / 2}
-          fill="#515151"
+        <text
+          x={x + width + 14}
+          y={y + height / 2 - 4}
+          fill="#172033"
+          fontSize={20}
+          fontWeight={700}
         >
-          {payload.name}:{payload.value}
+          {payload.value}
+        </text>
+
+        <text
+          x={x + width + 14}
+          y={y + height / 2 + 15}
+          fill="#667085"
+          fontSize={12}
+          fontWeight={500}
+        >
+          {payload.name}
         </text>
       </Layer>
     );
@@ -127,13 +140,13 @@ export function Charts({ applications }: ChartsProp) {
       <div className="chart-header">Application Stats</div>
 
       <div className="application-flow-chart">
-        <ResponsiveContainer width={900} height="70%">
+        <ResponsiveContainer width={800} height="60%">
           <Sankey
             data={graphData}
             node={MyCustomSankeyNode}
             link={MyCustomSankeyLink}
             nodeWidth={10}
-            nodePadding={60}
+            nodePadding={40}
             margin={{
               top: 20,
               right: 100,

@@ -165,7 +165,6 @@ export function Applications({ applications, setApplications, setEditingApplicat
                         onClick={() => {
                           setEditingApplication(true);
                           setEditingApplicationID(app.id);
-                          console.log(applications);
                         }}
                       >
                         <img src="edit_icon.svg" className="edit-icon" />

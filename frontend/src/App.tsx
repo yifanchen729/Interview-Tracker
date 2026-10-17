@@ -32,7 +32,7 @@ function App() {
     }
 
     // If none in local storage, use default
-    return new ApplicationArray();
+    return new ApplicationArray().applications;
   });
 
   // Whenever applications changed, save to local storage
