@@ -2,19 +2,17 @@
 
 Interview Tracker is a full-stack web application for discovering job opportunities and tracking internship and job applications in one place.
 
-The application collects job postings from public job-board APIs and provides an interface for searching and filtering opportunities. It also allows users to track their applications, deadlines, statuses, and application statistics.
+The application aggregates job postings from public job-board APIs and provides tools for searching, filtering, and exploring available positions. Users can also manage their applications, track their progress through different stages, monitor upcoming deadlines, and visualize their application activity through an interactive dashboard.
 
 ## Features
 
+- Track one self's current job applications and their current status
 - Browse job openings collected from public job-board APIs
-- Search jobs by company or role
 - Filter jobs by company, location, and posting date
-- Sort job postings by newest
 - View posting dates and application deadlines
 - Open original job postings directly from the application
-- Track job applications and their current status
-- View application statistics through dashboard visualizations
-- Store job and application data in MongoDB
+- Visualize application progress using a Sankey chart
+- Provide AI-powered recommendations based on current application data
 
 ## Technology
 
@@ -59,10 +57,11 @@ cd backend
 npm install
 ```
 
-Create a `.env` file inside the `backend` directory and add your MongoDB connection string:
+Create a `.env` file inside the `backend` directory and add:
 
 ```env
 MONGO_URI=your_mongodb_connection_string
+GEMINI_API_KEY=your_google_ai_studio_api
 ```
 
 The `.env` file contains credentials and should **not** be committed to Git.
@@ -116,9 +115,8 @@ Planned improvements include:
 
 - Expanding job-source coverage
 - Improving job search and filtering
-- Adding more visual information to application tracking
 - Deploying the full-stack application
-- Exploring AI features for job recommendations and job-search guidance
+- Improve current AI features
 
 ## Author
 
