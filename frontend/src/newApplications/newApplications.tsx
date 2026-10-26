@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios"
+import { io } from "socket.io-client";
 
 import "./newApplications.css";
+
+const socket = io("http://localhost:5000");
 
 type NewApplicationsProps = {
   search: string;
@@ -36,8 +39,27 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
     getJobList();
   }, []);
 
-  const applyFilters = () => {
-    let result = [...apps];
+  // Whenever backend sends the update our State as well
+  useEffect(() => {
+    socket.on("jobUpdate", (updatedJobs) => {
+      setApps(updatedJobs);
+      setFilteredApps(updatedJobs);
+    });
+
+    socket.on("newJobs", (newJobs) => {
+      alert(`${newJobs.length} new internship(s) found!`);
+    });
+
+    return () => {
+      socket.off("jobUpdate");
+      socket.off("newJobs");
+    };
+  }, []);
+
+  // Currently doing this
+  const applyFilters = (jobList = apps) => {
+    let result = [...jobList];
+
 
     // Search
     if (search !== "") {
@@ -107,7 +129,7 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     applyFilters();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (
@@ -175,7 +197,7 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
           </select>
         </div>
         <button className="job-filters-apply-filter-button"
-          onClick={applyFilters}
+          onClick={() => applyFilters(apps)}
         >
           Apply Filter
         </button>

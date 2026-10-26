@@ -15,10 +15,11 @@ const mongoose = require('mongoose');
 // deadlineAt: rawJob.application_deadline || "None"
 
 const TaskSchema = new mongoose.Schema({
-  id:
-  {
-    type:String, 
-  },
+id: {
+  type: String,
+  required: true,
+  unique: true
+},
   company:{
     type:String
   },

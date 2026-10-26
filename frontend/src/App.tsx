@@ -79,11 +79,11 @@ function App() {
               <Charts applications={applications} />
             )}
           </div>
-            <div className="different-pages-right">
-              <AIChat
-                applications={applications}
-              />
-            </div>
+          <div className="different-pages-right">
+            <AIChat
+              applications={applications}
+            />
+          </div>
         </div>
 
         {/* If adding application, then render the form */}
