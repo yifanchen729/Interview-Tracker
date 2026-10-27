@@ -1,7 +1,7 @@
 import './SideBar.css';
 
 // All current available button
-const sideBarButtonNames = ['Dashboard', 'Applications', 'Statistics'];
+const sideBarButtonNames = ['Dashboard', 'Apply', 'Statistics'];
 
 // Define props
 type SideBarProps = {

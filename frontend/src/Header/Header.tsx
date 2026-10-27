@@ -14,8 +14,8 @@ const pages = [{
   title: "Dashboard",
   description: "Your internship search, at a glance."
 }, {
-  title: "Applications",
-  description: "Your application details are here."
+  title: "Apply",
+  description: "Seeking new opportunity."
 }, {
   title: "Calendar",
   description: "Time management is a crucial skill."

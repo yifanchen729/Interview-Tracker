@@ -69,7 +69,7 @@ function App() {
               />
             )}
 
-            {activePage === "Applications" &&
+            {activePage === "Apply" &&
               <NewApplications
                 search={search}
                 setSearch={setSearch}
