@@ -72,20 +72,19 @@
   outline: 0;
 }
 
-.job-filters-apply-filter-button {
-  border: 0;
-  border-radius: 10px;
-  padding: 12px 17px;
-  font-weight: 600;
-  font-size: 13px;
-  background: #2563eb;
-  color: white;
-
+.newApplication-active-column
+{
   display: flex;
-  align-items: center;
-  gap: 7px;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .add-button-link {
   text-decoration: none;
+}
+
+.add-application-button {
+  white-space: nowrap;
+  font-family: "Times New Roman", Times, serif;
+  cursor: pointer;
 }

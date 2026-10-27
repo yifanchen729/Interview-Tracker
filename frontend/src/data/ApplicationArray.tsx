@@ -21,6 +21,11 @@ export type Application = {
   location: string;
 };
 
+export type ApplicationDraft = Pick<
+  Application,
+  "id" | "company" | "role" | "location"
+>;
+
 export class ApplicationArray {
   applications: Application[];
 
@@ -182,7 +187,7 @@ export class ApplicationArray {
         status,
         statusHistory,
         nextStep: "",
-        date: "10/26/2026",
+        date: "",
         location,
       });
     }

@@ -1,17 +1,23 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios"
 import { io } from "socket.io-client";
 
+import type { Application, ApplicationDraft } from "../data/ApplicationArray";
 import "./newApplications.css";
 
 const socket = io("http://localhost:5000");
 
 type NewApplicationsProps = {
+  applications: Application[];
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setAddingApplication: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedJob: React.Dispatch<
+    React.SetStateAction<ApplicationDraft | null>
+  >;
 };
 
-export function NewApplications({ search, setSearch }: NewApplicationsProps) {
+export function NewApplications({ applications, search, setSearch, setAddingApplication, setSelectedJob }: NewApplicationsProps) {
   const [apps, setApps] = useState<{
     id: string;
     company: string;
@@ -33,31 +39,13 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
       const response = await axios.get("http://localhost:5000/api/jobs");
 
       setApps(response.data.result);
-      setFilteredApps(response.data.result);
     };
 
     getJobList();
   }, []);
 
-  // Whenever backend sends the update our State as well
-  useEffect(() => {
-    socket.on("jobUpdate", (updatedJobs) => {
-      setApps(updatedJobs);
-      setFilteredApps(updatedJobs);
-    });
-
-    socket.on("newJobs", (newJobs) => {
-      alert(`${newJobs.length} new internship(s) found!`);
-    });
-
-    return () => {
-      socket.off("jobUpdate");
-      socket.off("newJobs");
-    };
-  }, []);
-
   // Currently doing this
-  const applyFilters = (jobList = apps) => {
+  const applyFilters = useCallback((jobList = apps) => {
     let result = [...jobList];
 
 
@@ -121,16 +109,40 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
       );
     }
 
+    const trackedIds = new Set(
+      applications.map(application => application.id)
+    );
+
+    result = result.filter(
+      application => !trackedIds.has(application.id)
+    );
+
     setFilteredApps(result);
-  };
+  }, [applications, apps, search, company, location, datePosted]);
+
+  // Whenever backend sends the update our State as well
+  useEffect(() => {
+    socket.on("jobUpdate", (updatedJobs) => {
+      setApps(updatedJobs);
+      applyFilters(updatedJobs);
+    });
+
+    socket.on("newJobs", (newJobs) => {
+      alert(`${newJobs.length} new internship(s) found!`);
+    });
+
+    return () => {
+      socket.off("jobUpdate");
+      socket.off("newJobs");
+    };
+  }, [applyFilters]);
 
   // There is a warning (Solving this will take too much time, since it currently does not influence
   // product, leave it as it is)
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     applyFilters();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+  }, [applyFilters]);
 
   return (
     <div className="new-applications-table-container">
@@ -196,11 +208,6 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
             <option>Last 30 Days</option>
           </select>
         </div>
-        <button className="job-filters-apply-filter-button"
-          onClick={() => applyFilters(apps)}
-        >
-          Apply Filter
-        </button>
       </div>
 
       <div className="table-scroll-container">
@@ -247,12 +254,26 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
                   </td>
 
                   {/* The active column */}
-                  <td>
+                  <td className="newApplication-active-column">
                     <a className="add-button-link" target="_blank" href={app.url}>
                       <button className="add-button" onClick={() => { }}>
                         Apply
                       </button>
                     </a>
+                    <button className="add-button add-application-button"
+                      onClick={() => {
+                        setSelectedJob({
+                          id: app.id,
+                          company: app.company,
+                          role: app.role,
+                          location: app.location,
+                        });
+
+                        setAddingApplication(true)
+                      }}
+                    >
+                      + Track
+                    </button>
                   </td>
                 </tr>
               );
@@ -270,6 +291,6 @@ export function NewApplications({ search, setSearch }: NewApplicationsProps) {
           </tbody>
         </table>
       </div>
-    </div>
+    </div >
   );
 }

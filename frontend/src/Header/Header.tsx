@@ -59,7 +59,7 @@ export function Header({ activePage, setActivePage, setAddingApplication, setSea
             onChange={(e) => setHeaderSearch(e.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
-                setActivePage("Applications");
+                setActivePage("Apply");
                 setSearch(headerSearch);
                 setHeaderSearch("");
                 event.currentTarget.blur();

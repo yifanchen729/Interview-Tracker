@@ -48,8 +48,6 @@ const updateDatabase = async (io) => {
       }
     })
 
-    console.log(jobList);
-
     // Load all into the main array
     allJobs.push(...jobList);
   }

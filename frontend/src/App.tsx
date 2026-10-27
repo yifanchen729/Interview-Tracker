@@ -5,7 +5,7 @@ import { SideBar } from "./SideBar/SideBar";
 import { Header } from "./Header/Header";
 import { Details } from "./Details/Details";
 import { Applications } from "./Applications/Applications";
-import type { Application } from "./data/ApplicationArray";
+import type { ApplicationDraft, Application } from "./data/ApplicationArray";
 import { ApplicationArray } from "./data/ApplicationArray";
 import { ApplicationForm } from "./Forms/ApplicationForm/ApplicationForm";
 import { EditForm } from "./Forms/EditForm/EditForm";
@@ -22,6 +22,7 @@ function App() {
   const [editingApplication, setEditingApplication] = useState(false);
   const [editingApplicationID, setEditingApplicationID] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedJob, setSelectedJob] = useState<ApplicationDraft | null>(null);
 
   // Create application from local storage
   const [applications, setApplications] = useState<Application[]>(() => {
@@ -71,8 +72,11 @@ function App() {
 
             {activePage === "Apply" &&
               <NewApplications
+                applications={applications}
                 search={search}
                 setSearch={setSearch}
+                setAddingApplication={setAddingApplication}
+                setSelectedJob={setSelectedJob}
               />}
 
             {activePage === "Statistics" && (
@@ -92,6 +96,8 @@ function App() {
             applications={applications}
             setApplications={setApplications}
             setAddingApplication={setAddingApplication}
+            selectedJob={selectedJob}
+            setSelectedJob={setSelectedJob}
           />
         )}
 

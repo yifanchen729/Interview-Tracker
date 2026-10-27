@@ -1,6 +1,7 @@
 import type {
   Application,
-  ApplicationStatus
+  ApplicationStatus,
+  ApplicationDraft
 } from "../../data/ApplicationArray";
 
 import "./ApplicationForm.css";
@@ -9,10 +10,14 @@ import "./ApplicationForm.css";
 type ApplicationFormProp = {
   applications: Application[];
   setApplications: React.Dispatch<React.SetStateAction<Application[]>>;
-  setAddingApplication: React.Dispatch<React.SetStateAction<boolean>>
+  setAddingApplication: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedJob: ApplicationDraft | null;
+  setSelectedJob: React.Dispatch<
+    React.SetStateAction<ApplicationDraft | null>
+  >;
 };
 
-export function ApplicationForm({ applications, setApplications, setAddingApplication }: ApplicationFormProp) {
+export function ApplicationForm({ applications, setApplications, setAddingApplication, selectedJob, setSelectedJob }: ApplicationFormProp) {
 
   function createStatusHistory(status: ApplicationStatus) {
     const now = new Date().toISOString();
@@ -85,7 +90,7 @@ export function ApplicationForm({ applications, setApplications, setAddingApplic
       formData.get("status") as ApplicationStatus;
 
     const newApplication: Application = {
-      id: crypto.randomUUID(),
+      id: selectedJob?.id ?? crypto.randomUUID(),
       company: formData.get("company") as string,
       role: formData.get("role") as string,
       status: newStatus,
@@ -107,6 +112,7 @@ export function ApplicationForm({ applications, setApplications, setAddingApplic
 
   const cancelApplication = () => {
     setAddingApplication(false);
+    setSelectedJob(null);
   };
 
   return (
@@ -146,6 +152,7 @@ export function ApplicationForm({ applications, setApplications, setAddingApplic
           <input
             name="company"
             placeholder="e.g. Google (required)"
+            defaultValue={selectedJob?.company || ""}
             required
           />
         </label>
@@ -156,6 +163,7 @@ export function ApplicationForm({ applications, setApplications, setAddingApplic
           <input
             name="role"
             placeholder="e.g. Software Engineer Intern (required)"
+            defaultValue={selectedJob?.role || ""}
             required
           />
         </label>
@@ -198,6 +206,7 @@ export function ApplicationForm({ applications, setApplications, setAddingApplic
           <input
             name="location"
             placeholder="Remote or city (required)"
+            defaultValue={selectedJob?.location || ""}
             required
           />
         </label>
