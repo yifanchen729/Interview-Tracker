@@ -29,10 +29,38 @@
 }
 
 .application-flow-chart {
-  height: 100%;
+  width: 100%;
+  height: 480px;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+  /* background-color: lightblue; */
+}
+
+.sankey-label {
+  background-color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  border: 2px solid;
+  border-radius: 4px;
+}
+
+.sankey-value {
+  color: white;
+  font-weight: 700;
+  padding: 5px;
+  font-size: 20px;
+  min-width: 40px;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: lightblue; */
+}
+
+.sankey-name {
+  font-weight: 600;
+  font-size: 14px;
+  padding-right: 5px;
+  color: rgb(76, 76, 76);
 }

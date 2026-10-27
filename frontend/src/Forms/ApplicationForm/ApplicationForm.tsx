@@ -1,4 +1,8 @@
-import type { Application } from "../../data/ApplicationArray"
+import type {
+  Application,
+  ApplicationStatus
+} from "../../data/ApplicationArray";
+
 import "./ApplicationForm.css";
 
 // Props
@@ -9,33 +13,95 @@ type ApplicationFormProp = {
 };
 
 export function ApplicationForm({ applications, setApplications, setAddingApplication }: ApplicationFormProp) {
+
+  function createStatusHistory(status: ApplicationStatus) {
+    const now = new Date().toISOString();
+
+    if (status === "To Apply") {
+      return [];
+    }
+
+    if (status === "Applied") {
+      return [
+        {
+          status: "Applied" as const,
+          changedAt: now,
+        },
+      ];
+    }
+
+    if (status === "Interviewing") {
+      return [
+        {
+          status: "Applied" as const,
+          changedAt: null,
+        },
+        {
+          status: "Interviewing" as const,
+          changedAt: now,
+        },
+      ];
+    }
+
+    if (status === "Offer") {
+      return [
+        {
+          status: "Applied" as const,
+          changedAt: null,
+        },
+        {
+          status: "Interviewing" as const,
+          changedAt: null,
+        },
+        {
+          status: "Offer" as const,
+          changedAt: now,
+        },
+      ];
+    }
+
+    // Rejected
+    return [
+      {
+        status: "Applied" as const,
+        changedAt: null,
+      },
+      {
+        status: "Rejected" as const,
+        changedAt: now,
+      },
+    ];
+  }
+
   // For submit the application
-  const submitApplication = (event: React.SubmitEvent<HTMLFormElement>) => {
-    // This prevents auto refresh after submit form (old mechanic)
+  const submitApplication = (
+    event: React.SubmitEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
-    // Get data from the form
     const formData = new FormData(event.currentTarget);
 
-    // Create new application object
-    // "as string" is to prevent TSX alarm
-    const newApplication = {
+    const newStatus =
+      formData.get("status") as ApplicationStatus;
+
+    const newApplication: Application = {
       id: crypto.randomUUID(),
       company: formData.get("company") as string,
       role: formData.get("role") as string,
-      status: formData.get("status") as string,
+      status: newStatus,
+
+      statusHistory: createStatusHistory(newStatus),
+
       nextStep: formData.get("nextStep") as string,
       date: formData.get("date") as string,
       location: formData.get("location") as string,
     };
 
-    // Add this to the array
     setApplications([
       ...applications,
       newApplication
     ]);
 
-    // This actual means done with application
     cancelApplication();
   };
 

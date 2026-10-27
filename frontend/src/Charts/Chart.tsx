@@ -1,5 +1,4 @@
 import {
-  Tooltip,
   ResponsiveContainer,
   Sankey,
   Layer,
@@ -16,44 +15,112 @@ type ChartsProp = {
 export function Charts({ applications }: ChartsProp) {
   // Counter that goes through application array
   let appliedNum = 0;
-  let interviewNum = 0;
-  let rejectedNum = 0;
-  let offerNum = 0;
+
+  let appliedToInterview = 0;
+  let appliedToRejected = 0;
+
+  let interviewToRejected = 0;
+  let interviewToOffer = 0;
 
   applications.forEach((application) => {
-    const status = application.status;
+    const history = application.statusHistory;
+
+    // Ignore "To Apply"
+    if (!history || history.length === 0) {
+      return;
+    }
 
     appliedNum++;
-    if (status === "Interviewing") {
-      interviewNum++;
-    } else if (status === "Rejected") {
-      rejectedNum++;
-      interviewNum++;
-    } else if (status === "Offer") {
-      offerNum++;
-      interviewNum++;
+
+    // Go through each transition in the history
+    for (let i = 0; i < history.length - 1; i++) {
+      const currentStatus = history[i].status;
+      const nextStatus = history[i + 1].status;
+
+      if (
+        currentStatus === "Applied" &&
+        nextStatus === "Interviewing"
+      ) {
+        appliedToInterview++;
+      }
+
+      else if (
+        currentStatus === "Applied" &&
+        nextStatus === "Rejected"
+      ) {
+        appliedToRejected++;
+      }
+
+      else if (
+        currentStatus === "Interviewing" &&
+        nextStatus === "Rejected"
+      ) {
+        interviewToRejected++;
+      }
+
+      else if (
+        currentStatus === "Interviewing" &&
+        nextStatus === "Offer"
+      ) {
+        interviewToOffer++;
+      }
     }
   });
 
-  // Sankey chart on the right
+  const appliedToUnknown =
+    appliedNum -
+    appliedToInterview -
+    appliedToRejected;
+
+  const interviewToUnknown =
+    appliedToInterview -
+    interviewToRejected -
+    interviewToOffer;
+
+  // Sankey chart data
   const graphData = {
     nodes: [
-      { name: "Applied", value: appliedNum },
-      { name: "Unknown", value: appliedNum - interviewNum },
-      { name: "Interview", value: interviewNum },
-      { name: "Rejected", value: rejectedNum },
-      { name: "Offer", value: offerNum },
-      { name: "Dummy", value: 0 },
+      { name: "Applications", value: appliedNum },           // 0: Applications
+      { name: "Pending", value: appliedToUnknown },          // 1: Pending after applying
+      { name: "Interviewing", value: appliedToInterview },     // 2: Reached interview
+      { name: "Rejected", value: appliedToRejected },        // 3: Rejected after applying
+      { name: "Pending", value: interviewToUnknown },        // 4: Pending after interview
+      { name: "Rejected", value: interviewToRejected },      // 5: Rejected after interview
+      { name: "Offers", value: interviewToOffer },           // 6: Offer after interview
     ],
 
     links: [
-      { source: 0, target: 1, value: appliedNum - interviewNum }, // From applied to unknown
-      { source: 0, target: 2, value: interviewNum }, // From applied to interview
-      { source: 2, target: 3, value: rejectedNum }, // From Interview to rejected
-      { source: 2, target: 4, value: offerNum }, // From Interview to offer
-      { source: 1, target: 5, value: 0 }, // From applied to dummy
+      { source: 0, target: 1, value: appliedToUnknown },
+      { source: 0, target: 2, value: appliedToInterview },
+      { source: 0, target: 3, value: appliedToRejected },
+      { source: 2, target: 4, value: interviewToUnknown },
+      { source: 2, target: 5, value: interviewToRejected },
+      { source: 2, target: 6, value: interviewToOffer },
     ],
   };
+
+  // Get node color based on its name
+  function getNodeColor(name: string) {
+    if (name === "Applications") return "#2f2fe8";
+    if (name === "Pending") return "#8d8b89";
+    if (name === "Interviewing") return "#0b8cf59e";
+    if (name === "Rejected") return "rgb(217, 47, 47)";
+    if (name === "Offers") return "#22c55e";
+
+    return "transparent";
+  }
+
+  // Get link color based on its index
+  function getLinkColor(index: number) {
+    if (index === 0) return "#8d8b898a";                 // Applied -> Unknown
+    if (index === 1) return "#0b8cf568";                 // Applied -> Interview
+    if (index === 2) return "rgba(217, 47, 47, 0.51)";   // Applied -> Rejected
+    if (index === 3) return "#8d8b898a";                 // Interview -> Unknown
+    if (index === 4) return "rgba(217, 47, 47, 0.51)";   // Interview -> Rejected
+    if (index === 5) return "#22c55e74";                 // Interview -> Offer
+
+    return "transparent";                                // It is should not exist
+  }
 
   function MyCustomSankeyNode({
     x,
@@ -62,41 +129,43 @@ export function Charts({ applications }: ChartsProp) {
     height,
     payload,
   }: SankeyNodeProps) {
-    if (payload.name == "Dummy") {
-      return;
-    }
-
-    let color = "blue";
-
-    if (payload.name === "Applied") color = "#2f2fe8";
-    else if (payload.name === "Unknown") color = "#8d8b89";
-    else if (payload.name === "Interview") color = "#0b8cf59e";
-    else if (payload.name === "Rejected") color = "rgb(217, 47, 47)";
-    else if (payload.name === "Offer") color = "#22c55e";
-    else if (payload.name === "Dummy") color = "black";
-
     return (
       <Layer>
-        <Rectangle x={x} y={y} width={width} height={height} fill={color} />
-        <text
-          x={x + width + 14}
-          y={y + height / 2 - 4}
-          fill="#172033"
-          fontSize={20}
-          fontWeight={700}
-        >
-          {payload.value}
-        </text>
+        <Rectangle
+          x={x}
+          y={y - 1}
+          width={width}
+          height={height + 2}
+          radius={4}
+          fill={getNodeColor(payload.name)}
+        />
 
-        <text
+        <foreignObject
           x={x + width + 14}
-          y={y + height / 2 + 15}
-          fill="#667085"
-          fontSize={12}
-          fontWeight={500}
+          y={y + height / 2 - 25}
+          width={300}
+          height={50}
         >
-          {payload.name}
-        </text>
+          <div
+            className="sankey-label"
+            style={{
+              borderColor: getNodeColor(payload.name),
+            }}
+          >
+            <div
+              className="sankey-value"
+              style={{
+                backgroundColor: getNodeColor(payload.name),
+              }}
+            >
+              {payload.value}
+            </div>
+
+            <div className="sankey-name">
+              {payload.name}
+            </div>
+          </div>
+        </foreignObject>
       </Layer>
     );
   }
@@ -111,14 +180,6 @@ export function Charts({ applications }: ChartsProp) {
     linkWidth,
     index,
   }: SankeyLinkProps) {
-    let color = "blue";
-
-    if (index === 0) color = "#8d8b898a";
-    else if (index === 1) color = "#0b8cf568";
-    else if (index === 2) color = "rgba(217, 47, 47, 0.51)";
-    else if (index === 3) color = "#22c55e74";
-    else if (index === 4) color = "transparent";
-
     return (
       <path
         d={`
@@ -127,10 +188,10 @@ export function Charts({ applications }: ChartsProp) {
          ${targetControlX},${targetY}
          ${targetX},${targetY}
       `}
-        stroke={color}
+        stroke={getLinkColor(index)}
         strokeWidth={linkWidth}
         fill="none"
-        strokeOpacity={0.4}
+        strokeOpacity={0.5}
       />
     );
   }
@@ -140,21 +201,17 @@ export function Charts({ applications }: ChartsProp) {
       <div className="chart-header">Application Stats</div>
 
       <div className="application-flow-chart">
-        <ResponsiveContainer width={800} height="60%">
+        <ResponsiveContainer width="100%" height="100%">
           <Sankey
             data={graphData}
             node={MyCustomSankeyNode}
             link={MyCustomSankeyLink}
-            nodeWidth={10}
-            nodePadding={40}
-            margin={{
-              top: 20,
-              right: 100,
-              bottom: 20,
-              left: 40,
-            }}
+            nodeWidth={24}
+            nodePadding={50}
+            align="left"
+            sort={false}
+            margin={{ top: 30, right: 150, bottom: 30, left: 80 }}
           >
-            <Tooltip />
           </Sankey>
         </ResponsiveContainer>
       </div>

@@ -1,4 +1,8 @@
-import type { Application } from "../../data/ApplicationArray"
+import type {
+  Application,
+  ApplicationStatus
+} from "../../data/ApplicationArray";
+
 import "./EditForm.css";
 
 // Props
@@ -9,11 +13,11 @@ type ApplicationFormProp = {
   editingApplicationID: string;
 };
 
-export function EditForm({ applications, setApplications, setEditingApplication, editingApplicationID}: ApplicationFormProp) {
+export function EditForm({ applications, setApplications, setEditingApplication, editingApplicationID }: ApplicationFormProp) {
   const currentApplication = applications.find((app) => {
     return app.id === editingApplicationID;
   })
-  
+
   // For submit the application
   const submitApplication = (event: React.SubmitEvent<HTMLFormElement>) => {
 
@@ -22,14 +26,51 @@ export function EditForm({ applications, setApplications, setEditingApplication,
 
     // Get data from the form
     const formData = new FormData(event.currentTarget);
+    const newStatus = formData.get("status") as ApplicationStatus;
 
     // Create new application object
     // "as string" is to prevent TSX alarm
-    const newApplication = {
-      id: crypto.randomUUID(),
+    let newStatusHistory = currentApplication!.statusHistory;
+
+    // Only update history if status changed
+    if (newStatus !== currentApplication!.status) {
+
+      // To Apply means the application hasn't entered the pipeline
+      if (newStatus === "To Apply") {
+        newStatusHistory = [];
+      } else {
+        // Check whether this status already exists in the history
+        const existingIndex = currentApplication!.statusHistory.findIndex(
+          (entry) => entry.status === newStatus
+        );
+
+        // If it already exists, go back to that point
+        if (existingIndex !== -1) {
+          newStatusHistory = currentApplication!.statusHistory.slice(
+            0,
+            existingIndex + 1
+          );
+        }
+
+        // Otherwise add the new status
+        else {
+          newStatusHistory = [
+            ...currentApplication!.statusHistory,
+            {
+              status: newStatus,
+              changedAt: new Date().toISOString(),
+            },
+          ];
+        }
+      }
+    }
+
+    const newApplication: Application = {
+      id: currentApplication!.id,
       company: formData.get("company") as string,
       role: formData.get("role") as string,
-      status: formData.get("status") as string,
+      status: newStatus,
+      statusHistory: newStatusHistory,
       nextStep: formData.get("nextStep") as string,
       date: formData.get("date") as string,
       location: formData.get("location") as string,
