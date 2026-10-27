@@ -64,3 +64,30 @@
   padding-right: 5px;
   color: rgb(76, 76, 76);
 }
+
+.chart-stats {
+  display: flex;
+  justify-content: center;
+  gap: 250px;
+  padding-top: 15px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.chart-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.chart-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.chart-stat-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #667085;
+}

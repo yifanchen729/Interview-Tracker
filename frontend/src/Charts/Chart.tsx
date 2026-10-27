@@ -196,6 +196,22 @@ export function Charts({ applications }: ChartsProp) {
     );
   }
 
+  const interviewRate =
+    appliedNum === 0
+      ? 0
+      : (appliedToInterview / appliedNum) * 100;
+
+  const offerRate =
+    appliedNum === 0
+      ? 0
+      : (interviewToOffer / appliedNum) * 100;
+
+  const rejectionRate =
+    appliedNum === 0
+      ? 0
+      : ((appliedToRejected + interviewToRejected) / appliedNum) * 100;
+
+
   return (
     <div className="chart">
       <div className="chart-header">Application Stats</div>
@@ -215,6 +231,36 @@ export function Charts({ applications }: ChartsProp) {
           </Sankey>
         </ResponsiveContainer>
       </div>
+
+      <div className="chart-stats">
+        <div className="chart-stat">
+          <span className="chart-stat-value">
+            {interviewRate.toFixed(1)}%
+          </span>
+          <span className="chart-stat-name">
+            Interview Rate
+          </span>
+        </div>
+
+        <div className="chart-stat">
+          <span className="chart-stat-value">
+            {offerRate.toFixed(1)}%
+          </span>
+          <span className="chart-stat-name">
+            Offer Rate
+          </span>
+        </div>
+
+        <div className="chart-stat">
+          <span className="chart-stat-value">
+            {rejectionRate.toFixed(1)}%
+          </span>
+          <span className="chart-stat-name">
+            Rejection Rate
+          </span>
+        </div>
+      </div>
+
     </div>
   );
 }
