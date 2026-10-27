@@ -84,7 +84,6 @@ const start = async () => {
       }
     }, 60 * 60 * 1000);
 
-
   } catch (error) {
     console.log(error)
   }
