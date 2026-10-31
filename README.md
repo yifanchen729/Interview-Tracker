@@ -8,11 +8,11 @@ The application aggregates job postings from public job-board APIs and provides 
 
 ### Application Dashboard
 
-<!-- ![Application Dashboard](screenshots/dashboard.png) -->
+![Application Dashboard](screenshots/dashboard.png)
 
 ### Job Finder
 
-<!-- ![Job Finder](screenshots/jobtable.png) -->
+![Job Finder](screenshots/jobtable.png)
 
 ### Statistics
 
