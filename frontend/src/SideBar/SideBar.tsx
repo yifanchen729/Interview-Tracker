@@ -104,7 +104,7 @@ export function SideBar({
         ) : (
           // User is not logged in
           <>
-            <div className="login-title">
+            <div className="login-title"> 
               Login
             </div>
 

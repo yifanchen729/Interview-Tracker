@@ -58,7 +58,7 @@ function App() {
         );
 
         setUser(response.data.user);
-      } catch (error) {
+      } catch {
         setUser(null);
       }
     };

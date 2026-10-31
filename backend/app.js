@@ -24,7 +24,6 @@ app.use(
 
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-
 app.use(cookieParser());
 
 // Attach Socket.IO
@@ -100,8 +99,6 @@ app.post('/api/auth/google', async (req, res) => {
       });
     }
 
-    console.log(picture);
-
     const authToken = jwt.sign(
       {
         // Uses my MongoDB generated ID
@@ -109,18 +106,31 @@ app.post('/api/auth/google', async (req, res) => {
       },
       process.env.JWT_SECRET,
       {
+        // This is how long the backend consider the JWT valid
         expiresIn: "7d",
       }
     );
 
     res.cookie("authToken", authToken, {
+      // Prevent JS to read the cookie
       httpOnly: true,
+      // Controls HTTP or HTTPS
+      // True: HTTPS only
+      // False: HTTP can send
+      // Cookie sent only over HTTPS on production but can do HTTP on localhost
       secure: process.env.NODE_ENV === "production",
+      // Controls cross-site cookie behavior, to mitigate
+      // CSRF (Cross Site Request Forgery), a way to use another browser
+      // to trick this browser to do malicious actions usings the cookie token
+      // Strict: strongest restriction
+      // Lax: allow some
+      // None: allow all
       sameSite: "lax",
+      // How long this is alive for in ms, this is currently 7 days
+      // This is how long the browser stores the JWT
+      // Should match with how long backend consider the JWT
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
-    console.log(user);
 
     res.status(200).json({
       message: "Google login successful",
@@ -136,6 +146,7 @@ app.post('/api/auth/google', async (req, res) => {
 });
 
 const requireAuth = (req, res, next) => {
+  // Get authToken
   const authToken = req.cookies.authToken;
 
   if (!authToken) {
@@ -144,6 +155,7 @@ const requireAuth = (req, res, next) => {
     });
   }
 
+  // Verify if it is valid
   try {
     const decoded = jwt.verify(
       authToken,
@@ -170,9 +182,7 @@ app.get("/api/auth/me", requireAuth, async (req, res) => {
       });
     }
 
-    res.status(200).json({
-      user,
-    });
+    res.status(200).json({user});
   } catch (error) {
     console.error(error);
 
