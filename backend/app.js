@@ -11,6 +11,8 @@ require('dotenv').config()
 const connectDB = require('./db/connect')
 const jobs = require('./models/jobs')
 const users = require('./models/users')
+const applications = require("./models/applications");
+
 const updateDatabase = require('./data/updateDatabase')
 
 app.use(express.json());
@@ -202,6 +204,109 @@ app.post("/api/auth/logout", (req, res) => {
   res.status(200).json({
     message: "Logout successful",
   });
+});
+
+app.get("/api/applications", requireAuth, async (req, res) => {
+  try {
+    const userApplications = await applications.find({
+      userId: req.userId,
+    });
+
+    res.status(200).json(userApplications);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to get applications",
+    });
+  }
+});;
+
+app.post("/api/applications", requireAuth, async (req, res) => {
+  try {
+    const application = await applications.create({
+      userId: req.userId,
+      jobId: req.body.jobId,
+      company: req.body.company,
+      role: req.body.role,
+      status: req.body.status,
+      statusHistory: req.body.statusHistory,
+      nextStep: req.body.nextStep,
+      date: req.body.date,
+      location: req.body.location,
+    });
+
+    res.status(201).json(application);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to create application",
+    });
+  }
+});
+
+app.put("/api/applications/:jobId", requireAuth, async (req, res) => {
+  try {
+    const application = await applications.findOneAndUpdate(
+      // Finds the first one that match (here it should be unique)
+      {
+        jobId: req.params.jobId,
+        userId: req.userId,
+      },
+      {
+        company: req.body.company,
+        role: req.body.role,
+        status: req.body.status,
+        statusHistory: req.body.statusHistory,
+        nextStep: req.body.nextStep,
+        date: req.body.date,
+        location: req.body.location,
+      },
+      {
+        // This config Mongoose to return the document after update,
+        // by default it does the old one
+        new: true,
+        // Let Mongoose check the new values against schema rules
+        runValidators: true,
+      }
+    );
+
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+      });
+    }
+
+    res.status(200).json(application);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to update application",
+    });
+  }
+});
+
+app.delete("/api/applications/:jobId", requireAuth, async (req, res) => {
+  try {
+    const application = await applications.findOneAndDelete({
+      jobId: req.params.jobId,
+      userId: req.userId,
+    });
+
+    if (!application) {
+      return res.status(404).json({
+        message: "Application not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Application deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to delete application",
+    });
+  }
 });
 
 // Sets up the server
