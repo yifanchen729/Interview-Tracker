@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import type {
   Application,
   ApplicationStatus,
@@ -79,7 +81,7 @@ export function ApplicationForm({ applications, setApplications, setAddingApplic
   }
 
   // For submit the application
-  const submitApplication = (
+  const submitApplication = async (
     event: React.SubmitEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
@@ -89,25 +91,38 @@ export function ApplicationForm({ applications, setApplications, setAddingApplic
     const newStatus =
       formData.get("status") as ApplicationStatus;
 
-    const newApplication: Application = {
+    const newApplication = {
       id: selectedJob?.id ?? crypto.randomUUID(),
       company: formData.get("company") as string,
       role: formData.get("role") as string,
       status: newStatus,
-
       statusHistory: createStatusHistory(newStatus),
-
       nextStep: formData.get("nextStep") as string,
       date: formData.get("date") as string,
       location: formData.get("location") as string,
     };
 
-    setApplications([
-      ...applications,
-      newApplication
-    ]);
+    try {
+      await axios.post(
+        "http://localhost:5000/api/applications",
+        {
+          ...newApplication,
+          jobId: newApplication.id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
-    cancelApplication();
+      setApplications([
+        ...applications,
+        newApplication,
+      ]);
+
+      cancelApplication();
+    } catch (error) {
+      console.error("Failed to create application:", error);
+    }
   };
 
   const cancelApplication = () => {

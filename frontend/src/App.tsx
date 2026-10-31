@@ -7,7 +7,6 @@ import { Header } from "./Header/Header";
 import { Details } from "./Details/Details";
 import { Applications } from "./Applications/Applications";
 import type { ApplicationDraft, Application } from "./data/ApplicationArray";
-import { ApplicationArray } from "./data/ApplicationArray";
 import { ApplicationForm } from "./Forms/ApplicationForm/ApplicationForm";
 import { EditForm } from "./Forms/EditForm/EditForm";
 import { Charts } from "./Charts/Chart";
@@ -34,16 +33,7 @@ function App() {
   const [selectedJob, setSelectedJob] = useState<ApplicationDraft | null>(null);
 
   // Create application from local storage
-  const [applications, setApplications] = useState<Application[]>(() => {
-    const savedApplications = localStorage.getItem("applications");
-
-    if (savedApplications) {
-      return JSON.parse(savedApplications);
-    }
-
-    // If none in local storage, use default
-    return new ApplicationArray().applications;
-  });
+  const [applications, setApplications] = useState<Application[]>([]);
 
   const [user, setUser] = useState<User | null>(null);
 
@@ -68,8 +58,39 @@ function App() {
 
   // Whenever applications changed, save to local storage
   useEffect(() => {
-    localStorage.setItem("applications", JSON.stringify(applications));
-  }, [applications]);
+    if (!user) return;
+
+    const getApplications = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/applications",
+          {
+            withCredentials: true,
+          }
+        );
+
+        const loadedApplications: Application[] = response.data.map(
+          // @ts-expect-error: Need type since tsx, may fix it later
+          (app) => ({
+            id: app.jobId,
+            company: app.company,
+            role: app.role,
+            status: app.status,
+            statusHistory: app.statusHistory,
+            nextStep: app.nextStep,
+            date: app.date,
+            location: app.location,
+          })
+        );
+
+        setApplications(loadedApplications);
+      } catch (error) {
+        console.error("Failed to load applications:", error);
+      }
+    };
+
+    getApplications();
+  }, [user]);
 
   return (
     // Entire window

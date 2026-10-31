@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import axios from "axios";
+
 import type { Application } from "../data/ApplicationArray"
 import './Applications.css'
 
@@ -61,12 +63,23 @@ export function Applications({ applications, setApplications, setEditingApplicat
   });
 
   // Delete application by not including application with specific id
-  const deleteApplication = (id: string) => {
-    setApplications(
-      applications.filter((application) => {
-        return application.id !== id;
-      })
-    );
+  const deleteApplication = async (id: string) => {
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/applications/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setApplications(
+        applications.filter((application) => {
+          return application.id !== id;
+        })
+      );
+    } catch (error) {
+      console.error("Failed to delete application:", error);
+    }
   };
 
   return (

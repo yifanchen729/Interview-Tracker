@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import type {
   Application,
   ApplicationStatus
@@ -19,7 +21,7 @@ export function EditForm({ applications, setApplications, setEditingApplication,
   })
 
   // For submit the application
-  const submitApplication = (event: React.SubmitEvent<HTMLFormElement>) => {
+  const submitApplication = async (event: React.SubmitEvent<HTMLFormElement>) => {
 
     // This prevents auto refresh after submit form (old mechanic)
     event.preventDefault();
@@ -76,18 +78,31 @@ export function EditForm({ applications, setApplications, setEditingApplication,
       location: formData.get("location") as string,
     };
 
-    // Change this specific object to the array
-    setApplications(
-      applications.map((app) => {
-        if (app.id !== editingApplicationID)
-          return app;
-        else
-          return newApplication;
-      })
-    )
+    try {
+      await axios.put(
+        `http://localhost:5000/api/applications/${newApplication.id}`,
+        {
+          ...newApplication,
+          jobId: newApplication.id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
-    // This actual means done with application
-    cancelApplication();
+      setApplications(
+        applications.map((app) => {
+          if (app.id !== editingApplicationID)
+            return app;
+          else
+            return newApplication;
+        })
+      );
+
+      cancelApplication();
+    } catch (error) {
+      console.error("Failed to update application:", error);
+    }
   };
 
   const cancelApplication = () => {
