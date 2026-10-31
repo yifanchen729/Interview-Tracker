@@ -14,6 +14,10 @@ The application aggregates job postings from public job-board APIs and provides 
 
 ![Job Finder](screenshots/jobtable.png)
 
+### Statistics
+
+![Job Finder](screenshots/stats.png)
+
 ## Features
 
 - Track one self's current job applications and their current status

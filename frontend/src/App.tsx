@@ -7,6 +7,7 @@ import { Header } from "./Header/Header";
 import { Details } from "./Details/Details";
 import { Applications } from "./Applications/Applications";
 import type { ApplicationDraft, Application } from "./data/ApplicationArray";
+import { ApplicationArray } from "./data/ApplicationArray";
 import { ApplicationForm } from "./Forms/ApplicationForm/ApplicationForm";
 import { EditForm } from "./Forms/EditForm/EditForm";
 import { Charts } from "./Charts/Chart";
@@ -33,7 +34,13 @@ function App() {
   const [selectedJob, setSelectedJob] = useState<ApplicationDraft | null>(null);
 
   // Create application from local storage
-  const [applications, setApplications] = useState<Application[]>([]);
+  const DEMO_MODE = true;
+
+  const [applications, setApplications] = useState<Application[]>(
+    DEMO_MODE
+      ? new ApplicationArray().applications
+      : []
+  );
 
   const [user, setUser] = useState<User | null>(null);
 
@@ -57,40 +64,40 @@ function App() {
   }, []);
 
   // Whenever applications changed, save to local storage
-  useEffect(() => {
-    if (!user) return;
+  // useEffect(() => {
+  //   if (!user) return;
 
-    const getApplications = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/applications",
-          {
-            withCredentials: true,
-          }
-        );
+  //   const getApplications = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:5000/api/applications",
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
 
-        const loadedApplications: Application[] = response.data.map(
-          // @ts-expect-error: Need type since tsx, may fix it later
-          (app) => ({
-            id: app.jobId,
-            company: app.company,
-            role: app.role,
-            status: app.status,
-            statusHistory: app.statusHistory,
-            nextStep: app.nextStep,
-            date: app.date,
-            location: app.location,
-          })
-        );
+  //       const loadedApplications: Application[] = response.data.map(
+  //         // @ts-expect-error: Need type since tsx, may fix it later
+  //         (app) => ({
+  //           id: app.jobId,
+  //           company: app.company,
+  //           role: app.role,
+  //           status: app.status,
+  //           statusHistory: app.statusHistory,
+  //           nextStep: app.nextStep,
+  //           date: app.date,
+  //           location: app.location,
+  //         })
+  //       );
 
-        setApplications(loadedApplications);
-      } catch (error) {
-        console.error("Failed to load applications:", error);
-      }
-    };
+  //       setApplications(loadedApplications);
+  //     } catch (error) {
+  //       console.error("Failed to load applications:", error);
+  //     }
+  //   };
 
-    getApplications();
-  }, [user]);
+  //   getApplications();
+  // }, [user]);
 
   return (
     // Entire window

@@ -136,7 +136,7 @@ export function Charts({ applications }: ChartsProp) {
           y={y - 1}
           width={width}
           height={height + 2}
-          radius={4}
+          radius={2}
           fill={getNodeColor(payload.name)}
         />
 
@@ -191,7 +191,7 @@ export function Charts({ applications }: ChartsProp) {
         stroke={getLinkColor(index)}
         strokeWidth={linkWidth}
         fill="none"
-        strokeOpacity={0.5}
+        strokeOpacity={0.3}
       />
     );
   }
@@ -217,12 +217,12 @@ export function Charts({ applications }: ChartsProp) {
       <div className="chart-header">Application Stats</div>
 
       <div className="application-flow-chart">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="80%" height="80%">
           <Sankey
             data={graphData}
             node={MyCustomSankeyNode}
             link={MyCustomSankeyLink}
-            nodeWidth={24}
+            nodeWidth={14}
             nodePadding={50}
             align="left"
             sort={false}
