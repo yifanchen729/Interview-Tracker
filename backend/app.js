@@ -4,16 +4,28 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
+const { OAuth2Client } = require("google-auth-library");
 const { GoogleGenAI } = require("@google/genai");
 require('dotenv').config()
 
 const connectDB = require('./db/connect')
 const jobs = require('./models/jobs')
+const users = require('./models/users')
 const updateDatabase = require('./data/updateDatabase')
 
 app.use(express.json());
 const cors = require("cors");
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+
+app.use(cookieParser());
 
 // Attach Socket.IO
 const io = new Server(server, {
@@ -65,6 +77,122 @@ app.post('/api/airesponse', async (req, res) => {
   }
 });
 
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+app.post('/api/auth/google', async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { sub, email, name, picture } = payload;
+
+    let user = await users.findOne({ googleId: sub });
+    if (!user) {
+      user = await users.create({
+        googleId: sub,
+        email,
+        name,
+        picture,
+      });
+    }
+
+    console.log(picture);
+
+    const authToken = jwt.sign(
+      {
+        // Uses my MongoDB generated ID
+        userId: user._id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+    res.cookie("authToken", authToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    console.log(user);
+
+    res.status(200).json({
+      message: "Google login successful",
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(401).json({
+      message: "Invalid Google token",
+    });
+  }
+});
+
+const requireAuth = (req, res, next) => {
+  const authToken = req.cookies.authToken;
+
+  if (!authToken) {
+    return res.status(401).json({
+      message: "Not authenticated",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(
+      authToken,
+      process.env.JWT_SECRET
+    );
+
+    req.userId = decoded.userId;
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      message: "Invalid or expired token",
+    });
+  }
+};
+
+app.get("/api/auth/me", requireAuth, async (req, res) => {
+  try {
+    const user = await users.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+});
+
+app.post("/api/auth/logout", (req, res) => {
+  res.clearCookie("authToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+
+  res.status(200).json({
+    message: "Logout successful",
+  });
+});
 
 // Sets up the server
 const port = process.env.PORT || 5000;

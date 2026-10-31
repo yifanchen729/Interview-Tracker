@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import "./App.css";
 import { SideBar } from "./SideBar/SideBar";
@@ -12,6 +13,14 @@ import { EditForm } from "./Forms/EditForm/EditForm";
 import { Charts } from "./Charts/Chart";
 import { NewApplications } from "./newApplications/newApplications";
 import { AIChat } from "./AIChat/AIChat";
+
+type User = {
+  _id: string;
+  googleId: string;
+  email: string;
+  name?: string;
+  picture?: string;
+};
 
 function App() {
   // useState for current page
@@ -36,6 +45,27 @@ function App() {
     return new ApplicationArray().applications;
   });
 
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/auth/me",
+          {
+            withCredentials: true,
+          }
+        );
+
+        setUser(response.data.user);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+
+    getCurrentUser();
+  }, []);
+
   // Whenever applications changed, save to local storage
   useEffect(() => {
     localStorage.setItem("applications", JSON.stringify(applications));
@@ -46,7 +76,12 @@ function App() {
     <div className="app">
       {/* Left part */}
       <div className="app-left">
-        <SideBar activePage={activePage} setActivePage={setActivePage} />
+        <SideBar
+          activePage={activePage}
+          setActivePage={setActivePage}
+          user={user}
+          setUser={setUser}
+        />
       </div>
       {/* Right part */}
       <div className="app-right">

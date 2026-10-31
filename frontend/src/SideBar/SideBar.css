@@ -12,6 +12,8 @@
 
   /* Prevents user to select */
   user-select: none;
+
+  justify-content: space-between;
 }
 
 .brand {
@@ -19,7 +21,8 @@
   font-weight: 800;
 
   display: flex;
-  align-items: center;  
+  align-items: center;
+  justify-content: center;
   
   padding: 0 8px 27px;
 }
@@ -65,4 +68,74 @@
 
 .settings {
   margin-top: auto;
+}
+
+.sidebar-bottom {
+  padding-top: 16px;
+  border-top: 1px solid #909fbc34;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.login-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #536078;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-picture {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: black;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  margin-top: 2px;
+
+  font-size: 10px;
+  color: #8a95a8;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logout-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 600;
+
+  text-decoration: underline;
+}
+
+.logout-button:hover {
+  color: #111827;
 }
