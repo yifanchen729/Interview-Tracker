@@ -1,18 +1,18 @@
 # Interview Tracker
 
-Interview Tracker is a full-stack web application for discovering job opportunities and tracking internship and job applications in one place.
+Interview Tracker is a full-stack web application for discovering software engineering opportunities and managing job and internship applications in one place.
 
-The application aggregates job postings from public job-board APIs and provides tools for searching, filtering, and exploring available positions. Users can also manage their applications, track their progress through different stages, monitor upcoming deadlines, and visualize their application activity through an interactive dashboard.
+The application aggregates job postings from public job-board APIs and provides tools for searching and filtering available positions. Authenticated users can save opportunities, track their progress through the application pipeline, manage upcoming steps, visualize application outcomes, and receive AI-powered assistance based on their application data.
 
 ## Screenshots
 
 ### Application Dashboard
 
-![Application Dashboard](screenshots/dashboard.png)
+<!-- ![Application Dashboard](screenshots/dashboard.png) -->
 
 ### Job Finder
 
-![Job Finder](screenshots/jobtable.png)
+<!-- ![Job Finder](screenshots/jobtable.png) -->
 
 ### Statistics
 
@@ -20,13 +20,16 @@ The application aggregates job postings from public job-board APIs and provides 
 
 ## Features
 
-- Track one self's current job applications and their current status
-- Browse job openings collected from public job-board APIs
-- Filter jobs by company, location, and posting date
+- Sign in securely with Google OAuth
+- Maintain user-specific application data across sessions
+- Track applications through stages including To Apply, Applied, Interviewing, Offer, and Rejected
+- Browse job openings aggregated from public job-board APIs
+- Search and filter opportunities by company, location, and posting date
 - View posting dates and application deadlines
 - Open original job postings directly from the application
-- Visualize application progress using a Sankey chart
-- Provide AI-powered recommendations based on current application data
+- Receive updates when new job postings are discovered
+- Visualize application progression and outcomes using Sankey diagrams
+- Receive AI-powered job search and application insights through an integrated chat interface
 
 ## Technology
 
