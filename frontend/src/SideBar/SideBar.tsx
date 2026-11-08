@@ -44,7 +44,6 @@ export function SideBar({
     }
   };
 
-
   return (
     // The entire side bar
     <aside className="sidebar">

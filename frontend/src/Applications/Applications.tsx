@@ -89,7 +89,7 @@ export function Applications({ applications, setApplications, setEditingApplicat
       <div className="applications-table-header">
         {/* Fixed header */}
         <div className="table-header-title">
-          Applications
+          Applications table
         </div>
         {/* Use function to get right num of current filter */}
         <div className="table-header-number-shown">

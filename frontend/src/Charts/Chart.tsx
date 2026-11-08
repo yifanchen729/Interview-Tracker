@@ -217,7 +217,7 @@ export function Charts({ applications }: ChartsProp) {
       <div className="chart-header">Application Stats</div>
 
       <div className="application-flow-chart">
-        <ResponsiveContainer width="80%" height="80%">
+        <ResponsiveContainer width="90%" height="90%">
           <Sankey
             data={graphData}
             node={MyCustomSankeyNode}

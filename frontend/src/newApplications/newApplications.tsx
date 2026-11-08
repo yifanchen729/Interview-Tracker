@@ -1,13 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
-import axios from "axios"
-import { io } from "socket.io-client";
+import { memo, useCallback, useEffect, useState } from "react";
 
 import type { Application, ApplicationDraft } from "../data/ApplicationArray";
+import type { Job } from "../data/Job";
+
 import "./newApplications.css";
 
-const socket = io("http://localhost:5000");
-
 type NewApplicationsProps = {
+  apps: Job[];
   applications: Application[];
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -17,32 +16,15 @@ type NewApplicationsProps = {
   >;
 };
 
-export function NewApplications({ applications, search, setSearch, setAddingApplication, setSelectedJob }: NewApplicationsProps) {
-  const [apps, setApps] = useState<{
-    id: string;
-    company: string;
-    role: string;
-    location: string;
-    publishedAt: string;
-    deadlineAt: string;
-    url: string;
-  }[]>([]);
+export const NewApplications = memo(function NewApplications(
+  { apps, applications, search, setSearch, setAddingApplication, setSelectedJob }: NewApplicationsProps
+) {
 
   const [company, setCompany] = useState("All Companies");
   const [location, setLocation] = useState("All Locations");
   const [datePosted, setDatePosted] = useState("Date Posted");
 
   const [filteredApps, setFilteredApps] = useState<typeof apps>([]);
-
-  useEffect(() => {
-    const getJobList = async () => {
-      const response = await axios.get("http://localhost:5000/api/jobs");
-
-      setApps(response.data.result);
-    };
-
-    getJobList();
-  }, []);
 
   // Currently doing this
   const applyFilters = useCallback((jobList = apps) => {
@@ -120,23 +102,6 @@ export function NewApplications({ applications, search, setSearch, setAddingAppl
     setFilteredApps(result);
   }, [applications, apps, search, company, location, datePosted]);
 
-  // Whenever backend sends the update our State as well
-  useEffect(() => {
-    socket.on("jobUpdate", (updatedJobs) => {
-      setApps(updatedJobs);
-      applyFilters(updatedJobs);
-    });
-
-    socket.on("newJobs", (newJobs) => {
-      alert(`${newJobs.length} new internship(s) found!`);
-    });
-
-    return () => {
-      socket.off("jobUpdate");
-      socket.off("newJobs");
-    };
-  }, [applyFilters]);
-
   // There is a warning (Solving this will take too much time, since it currently does not influence
   // product, leave it as it is)
   useEffect(() => {
@@ -148,10 +113,10 @@ export function NewApplications({ applications, search, setSearch, setAddingAppl
     <div className="new-applications-table-container">
       <div className="applications-table-header">
         {/* Fixed header */}
-        <div className="table-header-title">Applications</div>
+        <div className="table-header-title">New applications</div>
         {/* Use function to get right num of current filter */}
         <div className="table-header-number-shown">
-          {filteredApps.length} shown
+          {Math.min(100, filteredApps.length)} of {filteredApps.length} shown
         </div>
       </div>
 
@@ -225,7 +190,7 @@ export function NewApplications({ applications, search, setSearch, setAddingAppl
 
           <tbody>
             {/* Map each application into a row */}
-            {filteredApps.map((app) => {
+            {filteredApps.slice(0, 100).map((app) => {
               // Return is need, else use () to make it on same line as .map
               return (
                 // The company column
@@ -293,4 +258,4 @@ export function NewApplications({ applications, search, setSearch, setAddingAppl
       </div>
     </div >
   );
-}
+});

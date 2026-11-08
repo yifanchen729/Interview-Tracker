@@ -1,15 +1,15 @@
 /* Flex */
 .details-grid {
-  display: flex;
-
-  padding: 15px 0px;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0;
+  flex-shrink: 0;
 }
 
 /* Container for each grid */
 .details-card {
-  flex: 1;
-  padding: 40px;
+  padding: 15px;
   
   background: white;
   border: 1px solid rgba(173, 216, 230, 0.4);
@@ -17,13 +17,13 @@
 
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
 }
 
 /* The icon */
 .details-icon {
-  width: 46px;
-  height: 46px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
 
   display: flex;
@@ -33,7 +33,7 @@
 
 .details-icon-image
 {
-  width: 35px;
+  width: 24px;
 }
 
 /* Below are for changing colors */
@@ -56,18 +56,18 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 7px;
+  gap: 3px;
 }
 
 .details-label {
   margin: 0 0;
   color: rgb(100, 112, 137);
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 600;
 }
 
 .details-value {
   margin: 0 0;
   font-weight: 600;
-  font-size: 27px;
+  font-size: 22px;
 }

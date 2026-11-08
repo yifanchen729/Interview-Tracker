@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 import "./App.css";
 import { SideBar } from "./SideBar/SideBar";
@@ -13,6 +14,8 @@ import { EditForm } from "./Forms/EditForm/EditForm";
 import { Charts } from "./Charts/Chart";
 import { NewApplications } from "./newApplications/newApplications";
 import { AIChat } from "./AIChat/AIChat";
+
+import type { Job } from "./data/Job";
 
 type User = {
   _id: string;
@@ -33,13 +36,10 @@ function App() {
   const [search, setSearch] = useState("");
   const [selectedJob, setSelectedJob] = useState<ApplicationDraft | null>(null);
 
-  // Create application from local storage
   const DEMO_MODE = true;
 
   const [applications, setApplications] = useState<Application[]>(
-    DEMO_MODE
-      ? new ApplicationArray().applications
-      : []
+    DEMO_MODE ? new ApplicationArray().applications : [],
   );
 
   const [user, setUser] = useState<User | null>(null);
@@ -47,12 +47,9 @@ function App() {
   useEffect(() => {
     const getCurrentUser = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/auth/me",
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get("http://localhost:5000/api/auth/me", {
+          withCredentials: true,
+        });
 
         setUser(response.data.user);
       } catch {
@@ -62,6 +59,37 @@ function App() {
 
     getCurrentUser();
   }, []);
+
+  const [jobs, setJobs] = useState<Job[]>([]);
+
+  useEffect(() => {
+    const getJobList = async () => {
+      try {
+        const response = await axios.get<{ result: Job[] }>(
+          "http://localhost:5000/api/jobs",
+        );
+
+        setJobs(response.data.result);
+      } catch (error) {
+        console.error("Failed to load jobs:", error);
+      }
+    };
+
+    getJobList();
+  }, []);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+
+    socket.on("jobUpdate", (updatedJobs: Job[]) => {
+      setJobs(updatedJobs);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
 
   // Whenever applications changed, save to local storage
   // useEffect(() => {
@@ -120,7 +148,6 @@ function App() {
           setAddingApplication={setAddingApplication}
           setSearch={setSearch}
         />
-        <Details applications={applications} />
 
         <div className="different-pages">
           <div className="different-pages-left">
@@ -133,23 +160,24 @@ function App() {
               />
             )}
 
-            {activePage === "Apply" &&
+            <div className="apply-page" hidden={activePage !== "Apply"}>
               <NewApplications
+                apps={jobs}
                 applications={applications}
                 search={search}
                 setSearch={setSearch}
                 setAddingApplication={setAddingApplication}
                 setSelectedJob={setSelectedJob}
-              />}
+              />
+            </div>
 
             {activePage === "Statistics" && (
               <Charts applications={applications} />
             )}
           </div>
           <div className="different-pages-right">
-            <AIChat
-              applications={applications}
-            />
+            <Details applications={applications} />
+            <AIChat applications={applications} />
           </div>
         </div>
 
