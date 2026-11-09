@@ -20,6 +20,7 @@ export function Applications({ applications, setApplications, setEditingApplicat
 
   // useState to update the filter, default is "All"
   const [currentFilter, setCurrentFilter] = useState('All');
+  const [applicationSearch, setApplicationSearch] = useState("");
 
   // Function to update (Does not feel necessary to have this)
   const selectFilter = (filter: string) => {
@@ -57,9 +58,28 @@ export function Applications({ applications, setApplications, setEditingApplicat
     return correctFilter!.count;
   };
 
-  // Get the application list that match current Filter
-  const filteredApplications = applications.filter((application) => {
+  // Get the application list that match current Filter, since currentFilter and search are states
+  // We do not need another function for this
+  // First filter by application status
+  let filteredApplications = applications.filter((application) => {
     return currentFilter === "All" || application.status === currentFilter;
+  });
+
+  // Separate search keywords by spaces or commas
+  const keywords = applicationSearch
+    .toLowerCase()
+    .split(/[\s,]+/)
+    .filter(Boolean);
+
+  // Filter the remaining applications for each keyword
+  keywords.forEach((keyword) => {
+    filteredApplications = filteredApplications.filter((application) => {
+      return (
+        application.company.toLowerCase().includes(keyword) ||
+        application.role.toLowerCase().includes(keyword) ||
+        application.location.toLowerCase().includes(keyword)
+      );
+    });
   });
 
   // Delete application by not including application with specific id
@@ -99,6 +119,18 @@ export function Applications({ applications, setApplications, setEditingApplicat
 
       {/* The filter section */}
       <div className="table-filters">
+
+        <div className="search-box">
+          <img src="/search_icon.svg" className="search-box-icon" />
+          <input
+            className="search-box-input"
+            placeholder="Search companies or roles..."
+            value={applicationSearch}
+            onChange={(e) => setApplicationSearch(e.target.value)}
+          />
+        </div>
+
+
         {/* Create button for each filter choice */}
         {filters.map(filter => (
           <button

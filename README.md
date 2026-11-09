@@ -12,11 +12,11 @@ The application aggregates job postings from public job-board APIs and provides 
 
 ### Job Finder
 
-![Job Finder](screenshots/jobtable.png)
+![Job Finder](screenshots/apply.png)
 
 ### Statistics
 
-![Job Finder](screenshots/stats.png)
+![Statistics](screenshots/statistics.png)
 
 ## Features
 

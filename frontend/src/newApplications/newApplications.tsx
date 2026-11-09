@@ -33,10 +33,22 @@ export const NewApplications = memo(function NewApplications(
 
     // Search
     if (search !== "") {
-      result = result.filter((app) =>
-        app.company.toLowerCase().includes(search.toLowerCase()) ||
-        app.role.toLowerCase().includes(search.toLowerCase())
-      );
+      // Split the search into keywords, separated by spaces or commas
+      const keywords = search
+        .trim()
+        .toLowerCase()
+        .split(/[\s,]+/)
+        .filter(Boolean);
+
+      // Keep jobs that contain every keyword
+      keywords.forEach((keyword) => {
+        result = result.filter((app) => {
+          return (
+            app.company.toLowerCase().includes(keyword) ||
+            app.role.toLowerCase().includes(keyword)
+          );
+        });
+      });
     }
 
     // Company
@@ -126,7 +138,7 @@ export const NewApplications = memo(function NewApplications(
             <img src="/search_icon.svg" className="search-box-icon" />
             <input
               className="search-box-input"
-              placeholder="Search companies, roles, or notes..."
+              placeholder="Search companies or roles..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(event) => {
@@ -156,9 +168,16 @@ export const NewApplications = memo(function NewApplications(
           >
             <option>All Locations</option>
             <option>Remote</option>
-            <option>San Francisco</option>
+            <option>California</option>
+            <option>Texas</option>
             <option>New York</option>
-            <option>Seattle</option>
+            <option>Florida</option>
+            <option>Georgia</option>
+            <option>Ohio</option>
+            <option>Illinois</option>
+            <option>Pennsylvania</option>
+            <option>North Carolina</option>
+            <option>Michigan</option>
           </select>
 
           <select
