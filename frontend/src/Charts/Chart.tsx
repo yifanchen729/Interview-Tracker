@@ -129,6 +129,9 @@ export function Charts({ applications }: ChartsProp) {
     height,
     payload,
   }: SankeyNodeProps) {
+    // Hide both the bar and label when this node has no applications
+    if (payload.value === 0) return null;
+
     return (
       <Layer>
         <Rectangle

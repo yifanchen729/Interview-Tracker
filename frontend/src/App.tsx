@@ -36,7 +36,7 @@ function App() {
   const [search, setSearch] = useState("");
   const [selectedJob, setSelectedJob] = useState<ApplicationDraft | null>(null);
 
-  const DEMO_MODE = true;
+  const DEMO_MODE = false;
 
   const [applications, setApplications] = useState<Application[]>(
     DEMO_MODE ? new ApplicationArray().applications : [],
@@ -90,42 +90,41 @@ function App() {
     };
   }, []);
 
-
   // Whenever applications changed, save to local storage
-  // useEffect(() => {
-  //   if (!user) return;
+  useEffect(() => {
+    if (!user) return;
 
-  //   const getApplications = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "http://localhost:5000/api/applications",
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
+    const getApplications = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/applications",
+          {
+            withCredentials: true,
+          }
+        );
 
-  //       const loadedApplications: Application[] = response.data.map(
-  //         // @ts-expect-error: Need type since tsx, may fix it later
-  //         (app) => ({
-  //           id: app.jobId,
-  //           company: app.company,
-  //           role: app.role,
-  //           status: app.status,
-  //           statusHistory: app.statusHistory,
-  //           nextStep: app.nextStep,
-  //           date: app.date,
-  //           location: app.location,
-  //         })
-  //       );
+        const loadedApplications: Application[] = response.data.map(
+          // @ts-expect-error: Need type since tsx, may fix it later
+          (app) => ({
+            id: app.jobId,
+            company: app.company,
+            role: app.role,
+            status: app.status,
+            statusHistory: app.statusHistory,
+            nextStep: app.nextStep,
+            date: app.date,
+            location: app.location,
+          })
+        );
 
-  //       setApplications(loadedApplications);
-  //     } catch (error) {
-  //       console.error("Failed to load applications:", error);
-  //     }
-  //   };
+        setApplications(loadedApplications);
+      } catch (error) {
+        console.error("Failed to load applications:", error);
+      }
+    };
 
-  //   getApplications();
-  // }, [user]);
+    getApplications();
+  }, [user]);
 
   return (
     // Entire window
@@ -133,6 +132,7 @@ function App() {
       {/* Left part */}
       <div className="app-left">
         <SideBar
+          applications={applications}
           activePage={activePage}
           setActivePage={setActivePage}
           user={user}

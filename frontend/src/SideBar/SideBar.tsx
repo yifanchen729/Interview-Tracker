@@ -1,5 +1,10 @@
 import axios from "axios";
+
+import type { Application } from "../data/ApplicationArray";
+import { DailyGoal } from "./DailyGoal";
+
 import { GoogleLogin } from "@react-oauth/google";
+
 import './SideBar.css';
 
 // All current available button
@@ -15,6 +20,7 @@ type User = {
 
 // Define props
 type SideBarProps = {
+  applications: Application[];
   activePage: string;
   setActivePage: React.Dispatch<React.SetStateAction<string>>;
   user: User | null;
@@ -22,6 +28,7 @@ type SideBarProps = {
 };
 // Main function
 export function SideBar({
+  applications,
   activePage,
   setActivePage,
   user,
@@ -53,6 +60,8 @@ export function SideBar({
           <span>InterviewTracker</span>
         </div>
 
+        <p className="sidebar-section-title">Your workspace</p>
+
         {/* Container for the all buttons */}
         <nav className="sidebar-buttons">
           {/* Map each buuttonName in the array above to a button element*/}
@@ -71,6 +80,8 @@ export function SideBar({
             </button>
           ))}
         </nav>
+
+        <DailyGoal applications={applications} />
       </div>
 
       {/* The setting at the bottom */}
